@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💰 Finance IA
 
-## Getting Started
+Aplicação web de gestão financeira pessoal. O usuário entra com sua conta, registra receitas, despesas e investimentos e acompanha o resumo do mês num dashboard.
 
-First, run the development server:
+## Funcionalidades
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Login** com Clerk (cada usuário vê só as próprias transações)
+- **Dashboard** com cards de resumo e filtro por mês
+- **Transações**: criar e editar em um modal, com validação do formulário
+  - Tipos: depósito, despesa e investimento
+  - Categorias: moradia, transporte, alimentação, lazer, saúde, utilidades, salário, educação e outros
+  - Métodos de pagamento: cartão de crédito, cartão de débito, transferência, boleto, dinheiro, Pix e outros
+- **Tabela de transações** com badge por tipo, valores em reais e datas formatadas
+- **Página de assinatura** (estrutura inicial)
+
+## Stack
+
+| Camada | Tecnologias |
+|---|---|
+| Front-end | Next.js (App Router), React, TypeScript, Tailwind CSS, shadcn/ui (Radix UI), lucide-react |
+| Formulários | React Hook Form, Zod, react-number-format, react-day-picker, date-fns |
+| Tabelas | TanStack Table |
+| Back-end | Server Actions do Next.js, Prisma ORM, PostgreSQL |
+| Autenticação | Clerk |
+| Qualidade | ESLint, Prettier, Husky, lint-staged, commits padronizados |
+
+## Modelo de dados
+
+```prisma
+model Transaction {
+  id            String
+  name          String
+  type          TransactionType          // DEPOSIT | EXPENSE | INVESTMENT
+  amount        Decimal                  // Decimal(10, 2)
+  category      TransactionCategory
+  paymentMethod TransactionPaymentMethod
+  date          DateTime
+  userId        String
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Como rodar
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+git clone https://github.com/DanielBarret0/finance-ia.git
+cd finance-ia
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Crie um arquivo `.env` com as variáveis:
 
-## Learn More
+```env
+DATABASE_URL=
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+```
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npx prisma migrate dev
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Acesse http://localhost:3000.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Feito por [Daniel Barreto](https://www.linkedin.com/in/daniel-barreto-developer) · [Portfólio](https://portifoliodaniel.vercel.app/)
